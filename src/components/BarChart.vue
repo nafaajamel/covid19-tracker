@@ -1,4 +1,3 @@
-
 <script>
 import { Bar } from "vue-chartjs";
 export default {
@@ -13,20 +12,20 @@ export default {
         responsive: true,
         legend: false,
         maintainAspectRatio: false,
-        title: { display: true, text: `COVID-19 in ${this.country}` }
-      }
+        title: { display: true, text: `COVID-19 in ${this.country}` },
+      },
     };
   },
   watch: {
     country() {
       this.getChartData();
-    }
+    },
   },
   methods: {
     getChartData() {
       this.renderChart(this.chartData, this.options);
-    }
+    },
   },
-  props: { country: String, chartData: Object }
+  props: { country: String, chartData: Object },
 };
 </script>

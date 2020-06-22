@@ -1,13 +1,17 @@
 <template>
-  <md-card :class="'card' +  getClassName" md-with-hover>
+  <md-card :class="'card' + getClassName" md-with-hover>
     <md-ripple>
       <md-card-header>
-        <div class="md-title">{{title}}</div>
+        <div class="md-title">{{ title }}</div>
         <div class="md-subhead">
-          <ICountUp :delay="4000" :endVal="subTitle || 0" :options="countOptions"/>
+          <ICountUp
+            :delay="4000"
+            :endVal="subTitle || 0"
+            :options="countOptions"
+          />
         </div>
       </md-card-header>
-      <md-card-content>{{description}}</md-card-content>
+      <md-card-content>{{ description }}</md-card-content>
     </md-ripple>
   </md-card>
 </template>
@@ -18,14 +22,14 @@ export default {
   props: {
     title: String,
     subTitle: Number,
-    description: String
+    description: String,
   },
   components: { ICountUp },
   data() {
     return {
       countOptions: {
-        separator: " "
-      }
+        separator: " ",
+      },
     };
   },
   computed: {
@@ -36,12 +40,12 @@ export default {
         : title === "recovered"
         ? ` success`
         : ` danger`;
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .card {
   margin: 15px 0;
   --danger: #dc3545;
@@ -64,4 +68,3 @@ export default {
   border-bottom: 5px inset var(--success);
 }
 </style>
-

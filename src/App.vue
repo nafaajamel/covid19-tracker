@@ -5,11 +5,17 @@
         <span class="md-title">Covid-19 Tracker</span>
       </md-app-toolbar>
       <md-app-content>
-        <Cards :stats="stats"/>
-        <CountryPicker @selectCountry="getSelectedCountry" :countries="countries"/>
-        <Spinner v-if="loading"/>
-        <LineChart :chartData="chartData" v-else-if="selectedCountry==='all'"/>
-        <BarChart :chartData="chartData" :country="selectedCountry" v-else/>
+        <Cards :stats="stats" />
+        <CountryPicker
+          @selectCountry="getSelectedCountry"
+          :countries="countries"
+        />
+        <Spinner v-if="loading" />
+        <LineChart
+          :chartData="chartData"
+          v-else-if="selectedCountry === 'all'"
+        />
+        <BarChart :chartData="chartData" :country="selectedCountry" v-else />
       </md-app-content>
     </md-app>
   </div>
@@ -28,52 +34,49 @@ export default {
     LineChart,
     CountryPicker,
     BarChart,
-    Spinner
+    Spinner,
   },
   data() {
     return {
       stats: {
         confirmed: {
           title: "Infected",
-          description: "Number of active cases of COVID-19."
+          description: "Number of active cases of COVID-19.",
+          value: 0,
         },
         recovered: {
           title: "Recovered",
-          description: "Number of recoveries from COVID-19."
+          description: "Number of recoveries from COVID-19.",
+          value: 0,
         },
         deaths: {
           title: "Deaths",
-          description: "Number of deaths caused by COVID-19"
+          description: "Number of deaths caused by COVID-19",
+          value: 0,
         },
-        lastUpdate: ""
       },
       countries: [],
       selectedCountry: "all",
       chartData: {},
-      loading: true
+      loading: true,
     };
   },
   watch: {
     selectedCountry() {
       this.fetchChartData();
-    }
+    },
   },
   mounted() {
-         this.fetchChartData();
+    this.fetchChartData();
     this.$http.get(baseUrl).then(({ data }) => {
       this.stats = Object.keys(this.stats).reduce((acc, key) => {
-        acc[key] =
-          typeof acc[key] === "object"
-            ? { ...acc[key], ...data[key] }
-            : data[key];
+        acc[key].value = data[key].value;
         return acc;
       }, this.stats);
     });
     this.$http.get(countriesUrl).then(({ body: { countries } }) => {
-      this.countries = countries.map(country => country.name);
-     
+      this.countries = countries.map((country) => country.name);
     });
-
   },
   methods: {
     getSelectedCountry(country) {
@@ -81,11 +84,11 @@ export default {
     },
     fetchChartData() {
       this.loading = true;
-          const colors = {
-              danger: "#dc3545",
-              warning: "#ffc107",
-              success: "#28a745"
-            };
+      const colors = {
+        danger: "#dc3545",
+        warning: "#ffc107",
+        success: "#28a745",
+      };
       if (this.selectedCountry === "all") {
         this.$http.get(dailyDataUrl).then(({ body }) => {
           let [reportDate, infected, recovered, deaths] = body.reduce(
@@ -94,7 +97,7 @@ export default {
                 acc[0].concat(reportDate),
                 acc[1].concat(totalConfirmed),
                 acc[2].concat(recovered.total),
-                acc[3].concat(deaths.total)
+                acc[3].concat(deaths.total),
               ];
             },
             [[], [], [], []]
@@ -106,21 +109,21 @@ export default {
               {
                 label: "Infected",
                 data: infected,
-                borderColor: colors.warning
+                borderColor: colors.warning,
               },
               {
                 label: "Deaths",
                 data: deaths,
-                borderColor: colors.danger
+                borderColor: colors.danger,
               },
               {
                 label: "Recovered",
                 data: recovered,
-                borderColor: colors.success
-              }
-            ]
+                borderColor: colors.success,
+              },
+            ],
           };
-            this.loading = false;
+          this.loading = false;
         });
       } else {
         this.$http
@@ -133,23 +136,25 @@ export default {
                   backgroundColor: [
                     colors.warning,
                     colors.success,
-                    colors.danger
+                    colors.danger,
                   ],
-                  data: [confirmed.value, recovered.value, deaths.value]
-                }
-              ]
+                  data: [confirmed.value, recovered.value, deaths.value],
+                },
+              ],
             };
-              this.loading = false;
+            this.stats.recovered.value = recovered;
+            this.stats.confirmed.value = confirmed;
+            this.stats.deaths.value = deaths;
+            this.loading = false;
           })
-          .catch(err => console.log(err));
+          .catch((err) => console.log(err));
       }
-    
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .md-app {
   margin: 0;
   border: 1px solid rgba(#000, 0.12);

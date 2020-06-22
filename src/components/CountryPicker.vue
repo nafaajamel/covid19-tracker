@@ -4,7 +4,12 @@
       <label for="countries">by country</label>
       <md-select v-model="selectedCountry" name="countries" id="countries">
         <md-option value="all">all</md-option>
-        <md-option :key="country" v-for="country in countries" :value="country">{{country}}</md-option>
+        <md-option
+          :key="country"
+          v-for="country in countries"
+          :value="country"
+          >{{ country }}</md-option
+        >
       </md-select>
     </md-field>
   </div>
@@ -13,20 +18,19 @@
 export default {
   name: "CityPicker",
   props: {
-    countries: Array
+    countries: Array,
   },
   data() {
     return {
-      selectedCountry: ""
+      selectedCountry: "",
     };
   },
   watch: {
     selectedCountry() {
-      this.$emit("selectCountry",this.selectedCountry);
-    }
-  }
+      this.$emit("selectCountry", this.selectedCountry);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

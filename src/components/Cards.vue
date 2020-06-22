@@ -1,7 +1,7 @@
 <template>
   <div class="card-container">
     <Card
-      v-for="item , key  in stats"
+      v-for="(item, key) in stats"
       v-if="item.title"
       :title="item.title"
       :subTitle="item.value"
@@ -17,7 +17,7 @@ export default {
   name: "Cards",
   components: { Card },
   props: { stats: Object },
-  mounted() {}
+  mounted() {},
 };
 </script>
 <style scoped>
@@ -28,5 +28,3 @@ export default {
   }
 }
 </style>
-
-

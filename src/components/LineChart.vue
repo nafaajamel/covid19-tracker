@@ -1,4 +1,3 @@
-
 <script>
 import { Line } from "vue-chartjs";
 export default {
@@ -7,12 +6,11 @@ export default {
   mounted() {
     const options = {
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
     };
 
     this.renderChart(this.chartData, options);
   },
-  props: { chartData: Object }
+  props: { chartData: Object },
 };
 </script>
-

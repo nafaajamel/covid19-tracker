@@ -9,5 +9,5 @@ Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 Vue.use(VueRessource);
 new Vue({
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
