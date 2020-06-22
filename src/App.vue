@@ -68,12 +68,7 @@ export default {
   },
   mounted() {
     this.fetchChartData();
-    this.$http.get(baseUrl).then(({ data }) => {
-      this.stats = Object.keys(this.stats).reduce((acc, key) => {
-        acc[key].value = data[key].value;
-        return acc;
-      }, this.stats);
-    });
+
     this.$http.get(countriesUrl).then(({ body: { countries } }) => {
       this.countries = countries.map((country) => country.name);
     });
@@ -90,6 +85,12 @@ export default {
         success: "#28a745",
       };
       if (this.selectedCountry === "all") {
+        this.$http.get(baseUrl).then(({ data }) => {
+          this.stats = Object.keys(this.stats).reduce((acc, key) => {
+            acc[key].value = data[key].value;
+            return acc;
+          }, this.stats);
+        });
         this.$http.get(dailyDataUrl).then(({ body }) => {
           let [reportDate, infected, recovered, deaths] = body.reduce(
             (acc, { reportDate, totalConfirmed, recovered, deaths }) => {
@@ -142,9 +143,9 @@ export default {
                 },
               ],
             };
-            this.stats.recovered.value = recovered;
-            this.stats.confirmed.value = confirmed;
-            this.stats.deaths.value = deaths;
+            this.stats.recovered.value = recovered.value;
+            this.stats.confirmed.value = confirmed.value;
+            this.stats.deaths.value = deaths.value;
             this.loading = false;
           })
           .catch((err) => console.log(err));
